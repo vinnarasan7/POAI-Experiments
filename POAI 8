@@ -1,0 +1,42 @@
+# Facts: The knowledge base containing information about facts
+facts = {
+&#39;a&#39;: True,
+&#39;b&#39;: True,
+&#39;c&#39;: False
+}
+
+# Rules: List of rules where each rule is a tuple (conclusion, conditions)
+rules = [
+(&#39;d&#39;, [&#39;a&#39;, &#39;b&#39;]), # d can be concluded if a and b are true
+(&#39;e&#39;, [&#39;b&#39;, &#39;c&#39;]), # e can be concluded if b and c are true
+(&#39;f&#39;, [&#39;d&#39;, &#39;e&#39;]) # f can be concluded if d and e are true
+]
+
+# Forward Chaining Function
+def forward_chaining(facts, rules, goal):
+inferred = set(facts.keys()) # Initialize inferred facts with the given facts
+
+Artificial Intelligence and Machine Learning/AI23231/37
+
+new_inferred = set(facts.keys()) # Start with the facts
+while new_inferred:
+current_inferred = set() # Set to hold newly inferred facts
+for rule in rules:
+head, body = rule
+if head not in inferred and all(fact in inferred for fact in body):
+current_inferred.add(head)
+if current_inferred:
+inferred.update(current_inferred)
+new_inferred = current_inferred # Set new inferred facts for the next iteration
+else:
+new_inferred = set() # No new facts can be inferred
+
+return goal in inferred # Check if the goal is in the inferred facts
+
+# Example Usage
+goal = &#39;f&#39;
+
+if forward_chaining(facts, rules, goal):
+print(f&quot;The goal &#39;{goal}&#39; can be achieved.&quot;)
+else:
+print(f&quot;The goal &#39;{goal}&#39; cannot be achieved.&quot;)
